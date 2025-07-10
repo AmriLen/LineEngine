@@ -1,0 +1,84 @@
+#### LineEngineCore
+
+add_library(LineEngine
+    LineEngine.cpp
+    LineEngine.h
+)
+
+# Импорт FetchContent
+include(FetchContent)
+
+# glm
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY  https://github.com/g-truc/glm.git
+    GIT_TAG         0.9.9.8
+)
+FetchContent_MakeAvailable(glm)
+
+target_include_directories(LineEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_link_libraries(LineEngine
+    glm
+    glad
+    external
+)
+
+
+#### LineEngineEditor
+
+add_executable(LineEngineEditor 
+    LineEngineEditor.cpp
+    SecondaryWindow.cpp
+)
+target_link_libraries(LineEngineEditor LineEngine)
+
+# Импорт FetchContent
+include(FetchContent)
+
+# GLFW
+FetchContent_Declare(
+    glfw
+    GIT_REPOSITORY  https://github.com/glfw/glfw.git
+    GIT_TAG         latest
+)
+FetchContent_MakeAvailable(glfw)
+
+# glad
+FetchContent_Declare(
+    glad
+    GIT_REPOSITORY  https://github.com/Dav1dde/glad.git
+    GIT_TAG         v0.1.36
+)
+FetchContent_MakeAvailable(glad)
+
+# ImGui
+FetchContent_Declare(
+  imgui
+  GIT_REPOSITORY https://github.com/ocornut/imgui.git
+  GIT_TAG        v1.92.0-docking  # стабильная версия
+)
+FetchContent_MakeAvailable(imgui)
+
+target_sources(LineEngineEditor
+  PRIVATE
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
+target_include_directories(LineEngineEditor
+  PRIVATE
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
+
+target_link_libraries(LineEngineEditor
+    glfw
+    glad
+    external
+)
